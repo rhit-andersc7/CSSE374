@@ -45,7 +45,7 @@ export default class CPS implements IObservable {
 	}
 
 	add(observer: IObserver): void {
-		console.log(observer);
+		// console.log(observer);
 	}
 
 	remove(observer: IObserver): void {
