@@ -1,47 +1,37 @@
-import {default as appResponse} from "../data/app-response.json";
-import {default as commandStream} from "../data/command-stream.json";
-import {default as controllerResponse} from "../data/controller-response.json";
-import {default as orderInput} from "../data/order-input.json";
+import {default as rawAppResponse} from "../data/app-response.json";
+import {default as rawCommandStream} from "../data/command-stream.json";
+import {default as rawControllerResponse} from "../data/controller-response.json";
+import {default as rawOrderInput} from "../data/order-input.json";
 
 import AppResponse, {parseAppResponse} from "../src/AppResponse";
-import Command, {parseCommand} from "../src/Order";
+import Command, {parseCommand} from "../src/Command";
 import ControllerResponse, {parseControllerResponse} from "../src/ControllerResponse";
 import Order, {parseOrder} from "../src/Order";
 
-type Parsed = {
-	appResponse: Map<number, AppResponse>,
-	commandStream: Map<number, Command>,
-	controllerResponse: Map<number, ControllerResponse>,
-	orderInput: Map<number, Order>
-}
+const appResponse: Map<number, AppResponse> = new Map();
+const commandStream: Map<number, Command> = new Map();
+const controllerResponse: Map<number, ControllerResponse> = new Map();
+const orderInput: Map<number, Order> = new Map();
 
-const parsed: Parsed = {
-	appResponse: new Map(),
-	commandStream: new Map(),
-	controllerResponse: new Map(),
-	orderInput: new Map()
-}
-
-for (const raw of appResponse) {
+for (const raw of rawAppResponse) {
 	const response = parseAppResponse(raw);
-	parsed.appResponse.set(response.orderID, response);
+	appResponse.set(response.orderID, response);
 }
 
-for (const raw of commandStream) {
+for (const raw of rawCommandStream) {
 	const command = parseCommand(raw);
-	parsed.commandStream.set(command.id, command);
+	commandStream.set(command.orderID, command);
 }
 
-for (const raw of controllerResponse) {
+for (const raw of rawControllerResponse) {
 	const response = parseControllerResponse(raw);
-	parsed.controllerResponse.set(response.orderID, response);
+	controllerResponse.set(response.orderID, response);
 }
 
-for (const raw of orderInput) {
+for (const raw of rawOrderInput) {
 	const order = parseOrder(raw);
-	parsed.orderInput.set(order.id, order);
+	orderInput.set(order.id, order);
 }
 
-
-// export {appResponse, request, command, controllerResponse};
+export { appResponse, commandStream, controllerResponse, orderInput };
 

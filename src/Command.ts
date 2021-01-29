@@ -1,10 +1,8 @@
-import Condiment from "./Condiment";
-import Order, {parseOrder} from "./Order";
-
-let id = 0;
+import Condiment, {parseCondiments} from "./Condiment";
+import Order from "./Order";
 
 type Command = {
-	id: number,
+	controllerId: number,
 	machineID: number,
 	orderID: number,
 	drink: string,
@@ -14,7 +12,7 @@ type Command = {
 
 export function commandFromOrder(order: Order, machineID: number): Command {
 	return {
-		id: ++id,
+		controllerId: 0, // TODO: Fix this
 		machineID: machineID,
 		orderID: order.id,
 		drink: order.drink,
@@ -25,12 +23,12 @@ export function commandFromOrder(order: Order, machineID: number): Command {
 export function parseCommand(raw: Any): Command {
 	const command = raw["command"];
 	return {
-		id: command["controller_id"],
+		controller_id: command["controller_id"],
 		machineID: command["coffee_machine_id"],
 		orderID: command["orderID"],
 		drink: command["DrinkName"],
 		requestType: command["Requesttype"],
-		options: parseOrder(command["Options"])
+		options: parseCondiments(command["Options:"])
 	};
 }
 

@@ -1,5 +1,5 @@
 import Address from "./Address";
-import Condiment from "./Condiment";
+import Condiment, {parseCondiments} from "./Condiment";
 
 type Order = {
 	id: number,
@@ -13,8 +13,8 @@ export function parseOrder(raw: any): Order {
 	return {
 		id: order["orderID"],
 		address: order["address"],
-		drink: "",
-		condiments: []
+		drink: order["drink"],
+		condiments: parseCondiments(order["condiments"])
 	};
 }
 

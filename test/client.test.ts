@@ -3,44 +3,37 @@ import MobileAppClient from "../src/MobileAppClient";
 import Order, {parseOrder} from "../src/Order";
 import AppResponse, {parseAppResponse} from "../src/AppResponse";
 
-// import {default as responses} from "../data/app-response.json";
-// import {default as requests} from "../data/order-input.json";
-import {appResponse as responses, request as requests} from "./getdata";
-
+import {appResponse, orderInput} from "./getdata";
 import CPS from "../src/CPS";
+
+function matchResponses(actual: AppResponse, expected: AppResponse) {
+	expect(actual.orderID).toBe(expected.orderID);
+	expect(actual.machineID).toBe(expected.machineID);
+	expect(actual.status).toBe(expected.status);
+	expect(actual.message).toBe(expected.message);
+	expect(actual.error).toBe(expected.error);
+}
+
+const tests = [];
+appResponse.forEach((response, index) => {
+	const id = response.orderID;
+	const request = orderInput.get(id);
+	if (!request) throw new Error();
+	tests.push([id, request, response]);
+});
 
 describe("Client", () => {
 	let client: MobileAppClient;
-
 	new CPS();
-
-	const tests = [];
-	for (const i in requests) {
-		tests.push([
-			i,
-			parseOrder(requests[i]["order"]),
-			parseResponse(responses[i]["user-response"])
-		]);
-	}
-
-	// console.log(tests);
 
 	it("creates the MobileAppClient", () => {
 		client = new MobileAppClient();
 	});
 
-	// it.each(tests)(`does for %s`, (i, request, response) => {
-	// 	client.sendOrder(request as Order);
-	// 	expect(1).toBe(1);
-	// });
-	// for (const single in tests) {
-		//it("sends the request", () => {
-		//	// client.sendOrder();
-		//});
-
-		//it("receives the response", () => {
-		//	//
-		//});
-	// }
+	it.each(tests)(`matches response for order %s`, (i, request, response) => {
+		console.log(request);
+		console.log(response);
+		expect(1).toBe(1);
+	});
 });
 
