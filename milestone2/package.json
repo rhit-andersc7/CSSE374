@@ -1,0 +1,22 @@
+{
+	"name": "milestone2",
+	"version": "0.1.0",
+	"description": "Milestone 2 Code Implementation",
+	"main": "index.js",
+	"type": "module",
+	"author": "Cooper b. Anderson",
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc",
+		"start": "node ./dist/index.js",
+		"test": "jest --rootDir ./test/"
+	},
+	"devDependencies": {
+		"@babel/preset-env": "^7.12.11",
+		"@babel/preset-typescript": "^7.12.7",
+		"@types/jest": "^26.0.20",
+		"@types/node": "^14.14.22",
+		"jest": "^26.6.3",
+		"typescript": "^4.1.3"
+	}
+}
