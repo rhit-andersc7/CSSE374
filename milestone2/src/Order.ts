@@ -9,9 +9,10 @@ type Order = {
 };
 
 export function parseOrder(raw: any): Order {
+	const order = raw["order"]
 	return {
-		id: raw["orderID"],
-		address: raw["address"],
+		id: order["orderID"],
+		address: order["address"],
 		drink: "",
 		condiments: []
 	};
