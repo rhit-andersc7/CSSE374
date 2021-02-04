@@ -8,8 +8,8 @@
 	"license": "MIT",
 	"scripts": {
 		"build": "tsc",
-		"start:server": "node ./dist/server/index.js",
-		"start:database": "node ./dist/database/index.js",
+		"start:server": "node ./dist/src/server/index.js",
+		"start:data": "node ./dist/src/data/index.js",
 		"test": "jest --rootDir ./test/"
 	},
 	"devDependencies": {
