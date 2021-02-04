@@ -1,8 +1,8 @@
-import ControllerToAppResponse from "./ControllerToAppResponse";
-import IObserver from "./IObserver";
-import Order from "./Order";
+import ControllerToAppResponse from "../model/AppResponse";
+import IObserver from "../IObserver";
+import Order from "../model/Order";
 
-import CPS from "./CPS";
+import CPS from "../server/CPS";
 
 export default class MobileAppClient implements IObserver {
 	public clientID: number = 0;

@@ -3,7 +3,7 @@ type Condiment = {
 	quantity: number
 };
 
-export function parseCondiment(raw: Any) {
+export function parseCondiment(raw: any) {
 	if (raw === undefined) return undefined;
 	return {
 		name: raw["Name"] || raw["name"],
@@ -11,7 +11,7 @@ export function parseCondiment(raw: Any) {
 	}
 }
 
-export function parseCondiments(raw: Any) {
+export function parseCondiments(raw: any) {
 	if (raw === undefined) return undefined;
 	return raw.map(parseCondiment);
 }

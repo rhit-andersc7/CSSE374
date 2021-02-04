@@ -1,10 +1,10 @@
-import MobileAppClient from "../src/MobileAppClient";
+import MobileAppClient from "../src/client/MobileAppClient";
 
-import Order, {parseOrder} from "../src/Order";
-import AppResponse, {parseAppResponse} from "../src/AppResponse";
+import Order from "../src/model/Order";
+import AppResponse from "../src/model/AppResponse";
 
 import {appResponse, orderInput} from "./getdata";
-import CPS from "../src/CPS";
+import CPS from "../src/server/CPS";
 
 function matchResponses(actual: AppResponse, expected: AppResponse) {
 	expect(actual.orderID).toBe(expected.orderID);
@@ -14,12 +14,16 @@ function matchResponses(actual: AppResponse, expected: AppResponse) {
 	expect(actual.error).toBe(expected.error);
 }
 
-const tests = [];
-appResponse.forEach((response, index) => {
+type Test = (number | Order | AppResponse)[]
+
+const tests: Test[] = [];
+appResponse.forEach((response) => {
 	const id = response.orderID;
 	const request = orderInput.get(id);
 	if (!request) throw new Error();
 	tests.push([id, request, response]);
+	let x = [id, request, response];
+	x
 });
 
 describe("Client", () => {

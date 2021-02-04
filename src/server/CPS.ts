@@ -1,11 +1,11 @@
-import Address from "./Address";
-import Command from "./Command";
-import CoffeeMachine from "./CoffeeMachine";
-import ControllerToAppResponse from "./ControllerToAppResponse";
-import IObservable from "./IObservable";
-import IObserver from "./IObserver";
-import MobileAppClient from "./MobileAppClient";
-import Order from "./Order";
+import Address from "../model/Address";
+import Command from "../model/Command";
+import CoffeeMachine from "../client/CoffeeMachine";
+import ControllerToAppResponse from "../model/AppResponse";
+import IObservable from "../IObservable";
+import IObserver from "../IObserver";
+import MobileAppClient from "../client/MobileAppClient";
+import Order from "../model/Order";
 
 const machine = new CoffeeMachine();
 

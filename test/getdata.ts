@@ -3,10 +3,10 @@ import {default as rawCommandStream} from "../data/command-stream.json";
 import {default as rawControllerResponse} from "../data/controller-response.json";
 import {default as rawOrderInput} from "../data/order-input.json";
 
-import AppResponse, {parseAppResponse} from "../src/AppResponse";
-import Command, {parseCommand} from "../src/Command";
-import ControllerResponse, {parseControllerResponse} from "../src/ControllerResponse";
-import Order, {parseOrder} from "../src/Order";
+import AppResponse, {parseAppResponse} from "../src/model/AppResponse";
+import Command, {parseCommand} from "../src/model/Command";
+import ControllerResponse, {parseControllerResponse} from "../src/model/ControllerResponse";
+import Order, {parseOrder} from "../src/model/Order";
 
 const appResponse: Map<number, AppResponse> = new Map();
 const commandStream: Map<number, Command> = new Map();

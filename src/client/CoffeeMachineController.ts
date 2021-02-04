@@ -1,7 +1,6 @@
-import Command from "./Command";
-import IObservable from "./IObservable";
-import IObserver from "./IObserver";
-import Order from "./Order";
+import Command from "../model/Command";
+import IObserver from "../IObserver";
+import Order from "../model/Order";
 
 export default class CoffeeMachineController implements IObserver {
 	update(): void {

@@ -16,14 +16,15 @@ export function commandFromOrder(order: Order, machineID: number): Command {
 		machineID: machineID,
 		orderID: order.id,
 		drink: order.drink,
+		requestType: "",
 		options: order.condiments
 	};
 }
 
-export function parseCommand(raw: Any): Command {
+export function parseCommand(raw: any): Command {
 	const command = raw["command"];
 	return {
-		controller_id: command["controller_id"],
+		controllerId: command["controller_id"],
 		machineID: command["coffee_machine_id"],
 		orderID: command["orderID"],
 		drink: command["DrinkName"],

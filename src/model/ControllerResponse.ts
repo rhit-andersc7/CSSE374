@@ -1,4 +1,4 @@
-type ControllerToAppResponse = {
+type ControllerResponse = {
 	orderID: number,
 	errorCode: number
 	message: string,
@@ -13,5 +13,5 @@ export function parseControllerResponse(raw: any): ControllerResponse {
 	};
 }
 
-export default ControllerToAppResponse;
+export default ControllerResponse;
 

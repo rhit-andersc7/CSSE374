@@ -1,4 +1,4 @@
-import Command from "./Command";
+import Command from "../model/Command";
 
 export default class CoffeeMachine {
 	private static machines: CoffeeMachine[] = [];
