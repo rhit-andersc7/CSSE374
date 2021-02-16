@@ -5,8 +5,9 @@ export default class JSONDBConnector implements IDatabaseConnector {
 
 	}
 
-	getValue(): any {
-
+	getValue(key: string): any {
+		if (!["Expresso", "Americano"].includes(key)) return;
+		return { instructions: [`Brew ${key}`] };;
 	}
 }
 

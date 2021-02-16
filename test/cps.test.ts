@@ -1,7 +1,12 @@
 import CPS from "../src/server/CPS";
 import Order from "../src/model/Order";
+import Command, { commandFromOrder } from "../src/model/Command";
+import CoffeeMachine from "../src/client/CoffeeMachine";
 
 const cps = new CPS();
+cps.registerMachine(new CoffeeMachine());
+cps.registerMachine(new CoffeeMachine());
+cps.registerMachine(new CoffeeMachine());
 
 describe("Finding which machine", () => {
 
@@ -30,32 +35,70 @@ describe("Finding which machine", () => {
 });
 
 describe("Getting the recipe", () => {
-	it("errors when there is no valid recipe", () => {
+	let request: Order = {
+		id: 1,
+		address: {street: "", zip: ""},
+		drink: "",
+		condiments: []
+	};
 
+	it("errors when there is no valid recipe", () => {
+		expect(cps.getRecipe(request)).toBeUndefined();
 	});
 
 	it("receives the correct recipe", () => {
-
+		request.drink = "Expresso";
+		expect(cps.getRecipe(request)).toStrictEqual({
+			instructions: ["Brew Expresso"]
+		});
 	});
 });
 
-describe("Generating the order", () => {
-	it("generates the order", () => {
-
+describe("Generating the command", () => {
+	it("generates the command", () => {
+		let request: Order = {
+			id: 1,
+			address: {street: "", zip: ""},
+			drink: "Expresso",
+			condiments: []
+		};
+		let expected: Command = {
+			controllerId: 0,
+			machineID: 0,
+			orderID: 1,
+			drink: "Expresso",
+			requestType: "",
+			options: []
+		}
+		let actual = commandFromOrder(request, 0);
+		expect(actual).toStrictEqual(expected);
 	});
 });
 
 describe("Sending the order to the coffee machine", () => {
+	let request: Order = {
+		id: 1,
+		address: {street: "", zip: ""},
+		drink: "",
+		condiments: []
+	};
 	it("errors when the machine does not respond", () => {
-		
+		let command = commandFromOrder(request, 0);
+		expect(() => {cps.sendCommand(command, true)}).
+			toThrowError("Machine did not respond");
 	});
 
 	it("errors when the machine returns an error", () => {
-		
+		let command = commandFromOrder(request, 0);
+		expect(() => {cps.sendCommand(command)}).
+			toThrowError("Machine could not process request");
 	});
 
 	it("receives the order confirmation", () => {
-
+		request.drink = "Expresso";
+		let command = commandFromOrder(request, 0);
+		expect(() => {cps.sendCommand(command)}).
+			not.toThrow();
 	});
 });
 
