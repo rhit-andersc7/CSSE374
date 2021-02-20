@@ -13,8 +13,8 @@ describe("Finding which machine", () => {
 	it("errors when no machines apply", () => {
 		let request: Order = {
 			id: 1,
-			address: {street: "", zip: ""},
-			drink: "",
+			address: {street: "404 Invalid Ave", zip: "1337"},
+			drink: "Expresso",
 			condiments: []
 		};
 		expect(cps.findCoffeeMachine(request)).toBe(-1);
@@ -23,14 +23,15 @@ describe("Finding which machine", () => {
 	it("receives the controller id", () => {
 		let request: Order = {
 			id: 1,
-			address: {street: "", zip: ""},
+			address: {street: "5500 Wabash Ave", zip: "47803"},
 			drink: "Expresso",
 			condiments: []
 		};
-		expect(cps.findCoffeeMachine(request)).toBe(2);
-		request.id = 2;
-		request.drink = "Americano";
 		expect(cps.findCoffeeMachine(request)).toBe(1);
+		request.id = 2;
+		request.address.street = "7745 East Edgewood";
+		request.address.zip = "46239";
+		expect(cps.findCoffeeMachine(request)).toBe(2);
 	});
 });
 

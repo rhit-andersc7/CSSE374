@@ -7,7 +7,7 @@
 	"author": "Cooper b. Anderson",
 	"license": "MIT",
 	"scripts": {
-		"build": "tsc",
+		"build": "tsc --watch --preserveWatchOutput",
 		"start:server": "node ./dist/src/server/index.js",
 		"start:data": "node ./dist/src/data/index.js",
 		"test": "jest --rootDir ./test/"
@@ -19,8 +19,5 @@
 		"@types/node": "^14.14.22",
 		"jest": "^26.6.3",
 		"typescript": "^4.1.3"
-	},
-	"dependencies": {
-		"express": "^4.17.1"
 	}
 }

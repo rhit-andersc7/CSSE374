@@ -1,7 +1,6 @@
-import Address from "../model/Address";
-import Command from "../model/Command";
+import Command, { commandFromOrder } from "../model/Command";
 import CoffeeMachine from "../client/CoffeeMachine";
-import ControllerToAppResponse from "../model/AppResponse";
+import AppResponse from "../model/AppResponse";
 import IObservable from "../IObservable";
 import IObserver from "../IObserver";
 import MobileAppClient from "../client/MobileAppClient";
@@ -13,6 +12,7 @@ export default class CPS implements IObservable {
 	static instance: CPS;
 
 	machines: Map<number, CoffeeMachine> = new Map();
+	responses: Map<IObserver, AppResponse | undefined> = new Map();
 	dbconnector: JSONDBConnector = new JSONDBConnector();
 
 	constructor() {
@@ -22,17 +22,49 @@ export default class CPS implements IObservable {
 	}
 
 	findCoffeeMachine(order: Order): number {
-		if (order.drink === "Expresso") return 2;
-		if (order.drink === "Americano") return 1;
+		const street = order.address.street;
+		const zip = order.address.zip;
+		if (street == "5500 Wabash Ave" && zip == "47803") return 1;
+		if (street == "7745 East Edgewood" && zip == "46239") return 2;
 		return -1;
 	}
 
-	processOrder(order: Order): void {
+	processOrder(client: MobileAppClient, order: Order, timeout = false): void {
 		const machineID = this.findCoffeeMachine(order);
-		if (machineID === -1) {
-			// Send error
-			return
+		const response: AppResponse = {
+				orderID: order.id,
+				machineID: machineID,
+				status: 2,
+				message: "An error has occured.",
+				error: ""
 		}
+		if (machineID === -1) {
+			response.error = "No suitable machine can be found.";
+			this.sendResponse(client, response);
+			return;
+		}
+		let recipe = this.getRecipe(order);
+		if (!recipe) {
+			response.error = "No known recipe can be found.";
+			this.sendResponse(client, response);
+			return;
+		}
+		try {
+			this.sendCommand(commandFromOrder(order, machineID), timeout);
+		} catch (e) {
+			if (e.message == "Machine could not process request") {
+				response.error = "Coffee machine could not complete order.";
+				this.sendResponse(client, response);
+			} else if (e.message == "Machine did not respond") {
+				response.error = "No response from coffee machine.";
+				this.sendResponse(client, response);
+				return;
+			}
+			return;
+		}
+		response.status = 0;
+		response.message = "Order placed successfully.";
+		this.sendResponse(client, response);
 	}
 
 	sendCommand(command: Command, timeout = false): void {
@@ -46,10 +78,6 @@ export default class CPS implements IObservable {
 		if (!res) throw new Error("Machine did not respond");
 	}
 
-	relayOrderAsCommand(order: Order): boolean {
-		return false;
-	}
-
 	getRecipe(order: Order): Recipe | undefined {
 		return this.dbconnector.getValue(order.drink);
 	}
@@ -60,19 +88,17 @@ export default class CPS implements IObservable {
 		return true;
 	}
 
-	sendResponse(
-		appClient: MobileAppClient,
-		response: ControllerToAppResponse
-	): boolean {
-		return false;
+	sendResponse(appClient: MobileAppClient, response: AppResponse): void {
+		this.responses.set(appClient, response);
+		appClient.update();
 	}
 
 	add(observer: IObserver): void {
-		// console.log(observer);
+		this.responses.set(observer, undefined);
 	}
 
 	remove(observer: IObserver): void {
-
+		this.responses.delete(observer);
 	}
 
 	notify(): void {

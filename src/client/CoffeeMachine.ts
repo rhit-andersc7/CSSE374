@@ -18,7 +18,7 @@ export default class CoffeeMachine {
 
 	brew(command: Command, timeout = false): boolean {
 		if (timeout) return false;
-		if (!["Expresso", "Americano"].includes(command.drink)) {
+		if (!["Expresso"].includes(command.drink)) {
 			throw new Error("Unable to brew drink");
 		}
 
