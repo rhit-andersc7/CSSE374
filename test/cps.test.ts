@@ -1,12 +1,11 @@
 import CPS from "../src/server/CPS";
 import Order from "../src/model/Order";
 import Command, { commandFromOrder } from "../src/model/Command";
-import CoffeeMachine from "../src/client/CoffeeMachine";
+import { CoffeeMachineFactory } from "../src/client/CoffeeMachine";
 
 const cps = new CPS();
-cps.registerMachine(new CoffeeMachine());
-cps.registerMachine(new CoffeeMachine());
-cps.registerMachine(new CoffeeMachine());
+const factory = new CoffeeMachineFactory();
+factory.createMachines(cps, 3);
 
 describe("Finding which machine", () => {
 

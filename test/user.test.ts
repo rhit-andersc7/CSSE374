@@ -1,4 +1,4 @@
-import CoffeeMachine from "../src/client/CoffeeMachine";
+import { CoffeeMachineFactory } from "../src/client/CoffeeMachine";
 import MobileAppClient from "../src/client/MobileAppClient";
 import AppResponse from "../src/model/AppResponse";
 import Order from "../src/model/Order";
@@ -6,9 +6,8 @@ import CPS from "../src/server/CPS";
 
 describe("Placing an order", () => {
 	const cps = new CPS();
-	cps.registerMachine(new CoffeeMachine());
-	cps.registerMachine(new CoffeeMachine());
-	cps.registerMachine(new CoffeeMachine());
+	const factory = new CoffeeMachineFactory();
+	factory.createMachines(cps, 3);
 	const app: MobileAppClient = new MobileAppClient();
 
 	it("errors when no machine applies", () => {

@@ -1,5 +1,6 @@
 import Command from "../model/Command";
 import Condiment from "../model/Condiment";
+import CPS from "../server/CPS";
 
 export default class CoffeeMachine {
 	private static machines: CoffeeMachine[] = [];
@@ -40,6 +41,20 @@ export default class CoffeeMachine {
 
 	public static getMachine(id: number): CoffeeMachine {
 		return CoffeeMachine.machines[id];
+	}
+}
+
+export class CoffeeMachineFactory {
+	createMachine(cps: CPS): CoffeeMachine {
+		const machine = new CoffeeMachine();
+		cps.registerMachine(machine);
+		return machine;
+	}
+
+	createMachines(cps: CPS, count: number): CoffeeMachine[] {
+		const machines: CoffeeMachine[] = [];
+		for (let i = 0; i < count; i++) machines.push(this.createMachine(cps));
+		return machines;
 	}
 }
 
