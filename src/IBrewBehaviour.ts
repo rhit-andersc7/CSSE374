@@ -1,4 +1,7 @@
+import CoffeeMachine from "./client/CoffeeMachine";
+
 export default interface IBrewBehaviour {
-	brew(): void;
+	brew(machine: CoffeeMachine): void;
+	getName(): string;
 }
 

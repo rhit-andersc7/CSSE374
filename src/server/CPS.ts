@@ -5,8 +5,8 @@ import IObservable from "../IObservable";
 import IObserver from "../IObserver";
 import MobileAppClient from "../client/MobileAppClient";
 import Order from "../model/Order";
-import Recipe from "../model/Recipe";
 import JSONDBConnector from "../data/JSONDBConnector";
+import IBrewBehaviour from "../IBrewBehaviour";
 
 export default class CPS implements IObservable {
 	static instance: CPS;
@@ -17,6 +17,14 @@ export default class CPS implements IObservable {
 
 	constructor() {
 		this.dbconnector.connect();
+		this.dbconnector.addRecipe("Expresso", <IBrewBehaviour> {
+			brew: _ => {},
+			getName: () => "Expresso"
+		});
+		this.dbconnector.addRecipe("Americano", <IBrewBehaviour> {
+			brew: _ => {},
+			getName: () => "Americano"
+		});
 		if (CPS.instance) return CPS.instance
 		else CPS.instance = this;
 	}
@@ -78,7 +86,7 @@ export default class CPS implements IObservable {
 		if (!res) throw new Error("Machine did not respond");
 	}
 
-	getRecipe(order: Order): Recipe | undefined {
+	getRecipe(order: Order): IBrewBehaviour | undefined {
 		return this.dbconnector.getValue(order.drink);
 	}
 

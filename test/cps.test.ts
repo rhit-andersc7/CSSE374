@@ -48,9 +48,9 @@ describe("Getting the recipe", () => {
 
 	it("receives the correct recipe", () => {
 		request.drink = "Expresso";
-		expect(cps.getRecipe(request)).toStrictEqual({
-			instructions: ["Brew Expresso"]
-		});
+		let recipe = cps.getRecipe(request);
+		expect(recipe).not.toBeUndefined();
+		expect(recipe?.getName()).toBe("Expresso");
 	});
 });
 
