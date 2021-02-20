@@ -2,7 +2,7 @@ import Command from "../model/Command";
 import Condiment from "../model/Condiment";
 import CPS from "../server/CPS";
 
-export default class CoffeeMachine {
+export default abstract class CoffeeMachine {
 	private static machines: CoffeeMachine[] = [];
 
 	public id: number;
@@ -44,16 +44,38 @@ export default class CoffeeMachine {
 	}
 }
 
+export class SimpleCoffeeMachine extends CoffeeMachine {}
+export class AdvancedCoffeeMachine extends CoffeeMachine {}
+export class ProgrammableCoffeeMachine extends CoffeeMachine {}
+
+type CoffeeMachineType = "simple" | "advanced" | "programmable";
+const types = {
+	simple: SimpleCoffeeMachine,
+	advanced: AdvancedCoffeeMachine,
+	programmable: ProgrammableCoffeeMachine
+};
+
+/*
+ * Factory Pattern was used in the creation of the order. There are three
+ * different types of machines that the order needs to cater too
+ */
+
 export class CoffeeMachineFactory {
-	createMachine(cps: CPS): CoffeeMachine {
-		const machine = new CoffeeMachine();
+	createMachine(cps: CPS, type: CoffeeMachineType = "simple"): CoffeeMachine {
+		const machine = new types[type]();
 		cps.registerMachine(machine);
 		return machine;
 	}
 
-	createMachines(cps: CPS, count: number): CoffeeMachine[] {
+	createMachines(
+		cps: CPS,
+		count: number,
+		type: CoffeeMachineType = "simple"
+	): CoffeeMachine[] {
 		const machines: CoffeeMachine[] = [];
-		for (let i = 0; i < count; i++) machines.push(this.createMachine(cps));
+		for (let i = 0; i < count; i++) {
+			machines.push(this.createMachine(cps, type));
+		}
 		return machines;
 	}
 }
